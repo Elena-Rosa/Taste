@@ -3,42 +3,59 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Taste.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Threading.Tasks;
 
 namespace Taste
 {
- class Program
- {
-   static void Main(string[] args)
-   {
+  class Program
+  {
+    static void Main(string[] args)
+    {
 
-var builder = WebApplication.CreateBuilder(args);
+      WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+      builder.Services.AddControllersWithViews();
 
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-if (!app.Environment.IsDevelopment())
+      builder.Services.AddDbContext<TasteContext>(
+                        dbContextOptions => dbContextOptions
+                          .UseMySql(
+                            builder.Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"]
+                          )
+                        )
+                      );
+      
+      // New code below!!
+      builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<TasteContext>()
+                .AddDefaultTokenProviders();
+      builder.Services.Configure<IdentityOptions>(options =>
 {
-    app.UseExceptionHandler("/Home/Error");
-   
-    app.UseHsts();
+  // Default Password settings.
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = true;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 1;
+        });
+
+WebApplication app = builder.Build();
+
+      // app.UseDeveloperExceptionPage();
+      app.UseHttpsRedirection();
+      app.UseStaticFiles();
+
+      app.UseRouting();
+
+      // New code below!
+      app.UseAuthentication(); 
+      app.UseAuthorization();
+
+      app.MapControllerRoute(
+          name: "default",
+          pattern: "{controller=Home}/{action=Index}/{id?}"
+        );
+
+      app.Run();
+    }
+  }
 }
- builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-               .AddEntityFrameworkStores<TasteContext>()
-               .AddDefaultTokenProviders();
-
-     WebApplication app = builder.Build();
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
