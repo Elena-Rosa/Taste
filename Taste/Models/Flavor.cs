@@ -16,6 +16,8 @@ namespace Taste.Models
         public int TreatId { get; set; }
         public Treat treat { get; set; }
 
+        public string Name { get; set; }
+
         public virtual List<TreatFlavor> JoinEntities { get; set; }
 
         public ApplicationUser User { get; set; } 

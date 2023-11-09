@@ -1,0 +1,25 @@
+@model Taste.Models.Flavor
+@using Taste.Models
+
+@{
+    <!-- ViewBag.Title = "AddTreat"; -->
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2 class="title">Add an Engineer</h2>
+
+<div class="content_box">
+    <h4 class="bold">Add a treat: @Html.DisplayFor(model => model.Name) @Html.DisplayFor(model
+        =>
+        model.Name)</h4>
+
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.FlavorId)
+
+        @Html.Label("Select Treat")
+        @Html.DropDownList("TreatId", (SelectList)ViewBag.TreatId, "Select an treat")
+
+        <input type="submit" value="Save" class="button" />
+    }
+    <br>
+</div>

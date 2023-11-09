@@ -1,0 +1,26 @@
+@{
+  Layout = "_Layout";
+}
+@using Taste.Models
+@model Taste.Models.Flavor
+
+<h2>Edit</h2>
+
+<h4>Edit this flavor: @Html.DisplayFor(model => model.Name)</h4>
+
+@Html.ValidationMessageFor(model => model.Name)
+
+@using (Html.BeginForm())
+{
+  @Html.HiddenFor(model => model.FlavorId)
+
+  @Html.LabelFor(model => model.Name)
+  @Html.EditorFor(model => model.Name)
+
+  @Html.LabelFor(model => model.FlavorDescription)
+  @Html.EditorFor(model => model.FlavorDescription)
+
+  <input type="submit" value="Save" />
+}
+
+<p>@Html.ActionLink("Back to list", "Index")</p>

@@ -1,0 +1,19 @@
+@model Taste.Models.Treat
+
+<h2 class="title">Add a Treat</h2>
+
+<div class="form-group">
+
+    <h4 class="bold">Add a flavor to this Treat: @Html.DisplayFor(model => model.Name)</h4>
+
+
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.TreatId)
+
+        @Html.Label("Select Treat")
+        @Html.DropDownList("TreatId")
+
+        <input type="submit" value="Save" class="button" />
+    }
+</div>
