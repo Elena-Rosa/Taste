@@ -7,6 +7,7 @@ namespace Taste.Models
     public class Treat
     {
         public int TreatId { get; set; }
+        [Required(ErrorMessage = "Please fill out this field")]
 
         public string Name {get; set;}
 

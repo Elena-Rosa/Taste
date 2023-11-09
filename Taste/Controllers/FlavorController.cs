@@ -1,27 +1,37 @@
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Taste.Models;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Taste.Controllers
 {
-  public class FlavorsController : Controller
+  [Authorize]
+  public class FlavorController : Controller
   {
     private readonly TasteContext _db;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public FlavorsController(TasteContext db)
+    public FlavorController(UserManager<ApplicationUser> userManager, TasteContext db)
     {
+      _userManager = userManager;
       _db = db;
     }
 
-     public ActionResult Index()
+    public async Task<ActionResult> Index()
     {
-      List<Flavor> model = _db.Flavors.ToList();
-      return View(model);
+      string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+      ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+      List<Flavor> userFlavors = _db.Flavors
+                          .Where(entry => entry.User.Id == currentUser.Id)
+                          .Include(flavor => flavor.Category)
+                          .ToList();
+      return View(userFlavors);
     }
 
     public ActionResult Create()
@@ -31,64 +41,59 @@ namespace Taste.Controllers
     }
 
     [HttpPost]
-    public ActionResult Create(Flavor flavor, int TreatId)
+    public async Task<ActionResult> Create(Flavor flavor, int TreatId)
     {
-      _db.Flavors.Add(flavor);
-      _db.SaveChanges();
-      if (TreatId !=0)
+      if (!ModelState.IsValid)
       {
-        _db.TreatFlavors.Add(new TreatFlavor() { TreatId = TreatId, FlavorId = flavor.FlavorId });
-        _db.SaveChanges();
+        ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
+        return View(flavor);
       }
-      
-      return RedirectToAction("Index");
+      else
+      {
+        string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
+        flavor.User = currentUser;
+        _db.Flavors.Add(flavor);
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+      }
     }
 
-
-  public ActionResult Details(int id)
-{
-    Flavor thisFlavor = _db.Flavors
-        .Include(flavor => flavor.JoinEntities)
-        .ThenInclude(join => join.Treat) 
-        .FirstOrDefault(flavor => flavor.FlavorId == id);
-
-    return View(thisFlavor);
-}
-
+    public ActionResult Details(int id)
+    {
+      Flavor thisItem = _db.Items
+          .Include(item => item.Category)
+          .Include(item => item.JoinEntities)
+          .ThenInclude(join => join.Treat)
+          .FirstOrDefault(flavor => flavor.FlavorId == id);
+      return View(thisFlavor);
+    }
 
     public ActionResult Edit(int id)
-    {
-      Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.TreatId == id);
-      return View(thisTreat);
-    }
-
-    [HttpPost]
-    public ActionResult Edit (Treat treat)
-    {
-      _db.Treats.Update(flavor);
-      _db.SaveChanges();
-      return RedirectToAction("Index");
-    }
-
-     public ActionResult AddTreat(int id)
     {
       Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
       ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
       return View(thisFlavor);
     }
-    
-    [HttpPost]
-    public ActionResult AddTreat(Flavor flavor, int FlavorId)
-    {
-      if (FlavorId != 0)
-      {
-        _db.TreatFlavors.Add(new TreatFlavor() { TreatId = TreatId, FlavorId = flavor.FlavorId });
-        _db.SaveChanges();
-      }
-      return RedirectToAction("Index");
-    }
-    
 
+    [HttpPost]
+    public ActionResult Edit(Flavor flavor)
+    {
+      
+      if (!ModelState.IsValid)
+      {
+        return View(flavor);
+      }
+      _db.Flavors.Update(flavor);
+      _db.SaveChanges();
+      return RedirectToAction("Details", new { id = flavor.FlavorId });
+    }
+    public ActionResult AddTreat(int id)
+    {
+      Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
+      ViewBag.TreatId = new SelectList(_db.Treats, "TreatId", "Name");
+      return View(thisFlavor);
+    }
     public ActionResult Delete(int id)
     {
       Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
@@ -96,7 +101,6 @@ namespace Taste.Controllers
     }
 
     [HttpPost, ActionName("Delete")]
-
     public ActionResult DeleteConfirmed(int id)
     {
       Flavor thisFlavor = _db.Flavors.FirstOrDefault(flavor => flavor.FlavorId == id);
@@ -105,15 +109,24 @@ namespace Taste.Controllers
       return RedirectToAction("Index");
     }
 
-    [HttpPost]
+   [HttpPost]
+    public ActionResult AddTreat(Flavor flavor, int TreatId)
+    {
+      if (TreatId != 0)
+      {
+        _db.TreatFlavors.Add(new TreatFlavor() { TreatId = TreatId, FlavorId = flavor.FlavorId });
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Index");
+    }   
 
+    [HttpPost]
     public ActionResult DeleteTreat(int joinId)
     {
-      var joinEntry = _db.Treats.FirstOrDefault(entry => entry.TreatFlavorId == joinId);
+      var joinEntry = _db.TreatFlavors.FirstOrDefault(entry => entry.TreatFlavorId == joinId);
       _db.TreatFlavors.Remove(joinEntry);
       _db.SaveChanges();
       return RedirectToAction("Details", new { id = joinEntry.FlavorId });
     }
-
   }
 }
