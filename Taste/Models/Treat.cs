@@ -11,11 +11,9 @@ namespace Taste.Models
 
         public string Name {get; set;}
 
-        public string Description {get; set;}
-
-        public Flavor flavor { get; set; }
-
         public virtual List<TreatFlavor> JoinEntities { get; set; }
+
+        public string Description {get; set;}
     }
 
 }

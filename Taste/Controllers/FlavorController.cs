@@ -29,7 +29,7 @@ namespace Taste.Controllers
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Flavor> userFlavors = _db.Flavors
                           .Where(entry => entry.User.Id == currentUser.Id)
-                          .Include(flavor => flavor.Category)
+                          .Include(flavor => flavor.Treat)
                           .ToList();
       return View(userFlavors);
     }
@@ -61,9 +61,9 @@ namespace Taste.Controllers
 
     public ActionResult Details(int id)
     {
-      Flavor thisItem = _db.Items
-          .Include(item => item.Category)
-          .Include(item => item.JoinEntities)
+      Flavor thisFlavor = _db.Flavors
+          .Include(flavor => flavor.Treat)
+          .Include(flavor => flavor.JoinEntities)
           .ThenInclude(join => join.Treat)
           .FirstOrDefault(flavor => flavor.FlavorId == id);
       return View(thisFlavor);

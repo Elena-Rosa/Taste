@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Taste.Controllers
 {
@@ -86,7 +88,8 @@ namespace Taste.Controllers
       if (FlavorId != 0)
       {
         if (_db.TreatFlavors.Any(join => join.FlavorId == FlavorId && join.TreatId == treat.TreatId) == false)
-          _db.TreatFlavors.Add(new TreatFlavor() { FlavorId = FlavorId, TreatId = treat.EngineerId });
+          _db.TreatFlavors.Add(new TreatFlavor() { FlavorId = FlavorId, TreatId = treat.TreatId });
+
       }
       _db.SaveChanges();
       return RedirectToAction("Details", new { id = treat.TreatId });

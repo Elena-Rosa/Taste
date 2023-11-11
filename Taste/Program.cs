@@ -9,53 +9,35 @@ namespace Taste
   class Program
   {
     static void Main(string[] args)
-    {
+        {
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-      WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
-      builder.Services.AddControllersWithViews();
-
-      builder.Services.AddDbContext<TasteContext>(
-                        dbContextOptions => dbContextOptions
-                          .UseMySql(
-                            builder.Configuration["ConnectionStrings:DefaultConnection"], ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"]
-                          )
-                        )
-                      );
-      
-      // New code below!!
-      builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<TasteContext>()
-                .AddDefaultTokenProviders();
-      builder.Services.Configure<IdentityOptions>(options =>
-{
-  // Default Password settings.
-        options.Password.RequireDigit = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireNonAlphanumeric = true;
-        options.Password.RequireUppercase = true;
-        options.Password.RequiredLength = 6;
-        options.Password.RequiredUniqueChars = 1;
-        });
-
-WebApplication app = builder.Build();
-
-      // app.UseDeveloperExceptionPage();
-      app.UseHttpsRedirection();
-      app.UseStaticFiles();
-
-      app.UseRouting();
-
-      // New code below!
-      app.UseAuthentication(); 
-      app.UseAuthorization();
-
-      app.MapControllerRoute(
-          name: "default",
-          pattern: "{controller=Home}/{action=Index}/{id?}"
-        );
-
-      app.Run();
+            builder.Services.AddControllersWithViews();
+            // be sure to update the line below for your project
+            builder.Services.AddDbContext<TasteContext>(options => options
+            .UseMySql(
+            builder.Configuration["ConnectionStrings:DefaultConnection"],
+            ServerVersion.AutoDetect(builder.Configuration["ConnectionStrings:DefaultConnection"])
+    )
+);      
+            // Line below adds Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                      .AddEntityFrameworkStores<TasteContext>()
+                      .AddDefaultTokenProviders();      
+             
+            WebApplication app = builder.Build();       
+            app.UseDeveloperExceptionPage();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();       
+            app.UseRouting();       
+            // Next two lines below enable authentication and authorization.
+            app.UseAuthentication();
+            app.UseAuthorization();     
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}"
+              );        
+            app.Run();
     }
   }
 }

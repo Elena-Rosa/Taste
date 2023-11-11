@@ -22,9 +22,7 @@ namespace Taste.Controllers
       [HttpGet("/")]
       public async Task<ActionResult> Index()
       {
-        Treat[] cats = _db.Treats.ToArray();
-        Dictionary<string,object[]> model = new Dictionary<string, object[]>();
-        model.Add("treats", cats);
+      
         string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
         if (currentUser != null)
