@@ -1,0 +1,31 @@
+@{
+  Layout = "_Layout";
+}
+@using Taste.Models
+@model Taste.Models.Treat
+
+
+<h1>Edit</h1>
+
+
+
+<h2>Edit treat: @Html.DisplayFor(model => model.Name)</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.TreatId)
+
+    @Html.LabelFor(model => model.Name)
+    @Html.EditorFor(model => model.Name)
+    <br />
+
+    @Html.LabelFor(model => model.Description)
+    @Html.EditorFor(model => model.Description)
+    <br />
+
+    <input type="submit" value="Save" />
+  }
+<div class="btn-container">
+  <p class="button">@Html.ActionLink("Back to list", "Index")</p>
+</div>
+</div>
