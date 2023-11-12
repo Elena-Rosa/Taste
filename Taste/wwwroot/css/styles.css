@@ -1,8 +1,18 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: Futura, "Trebuchet MS", Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
+
+.title {
+    text-align: center;
+    font-family: 'Future', sans-serif;
+    font-weight: 800;
+    font-size: 76px;
+    margin-top: -30px;
+    letter-spacing: 3px;
+  }
+  
 
 .container {
     width: 80%;
@@ -10,13 +20,13 @@ body {
 }
 
 header {
-    background-color: #333;
-    color: #fc8c8c;
+    background-color: #fbc7c7;
+    color: #8cfcb0;
     padding: 10px 0;
 }
 
 nav {
-    background-color: #444;
+    background-color: #f8f0f0;
 }
 
 nav ul {
@@ -35,5 +45,5 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 hr {
-    border: 1px solid #ef1515;
+    border: 1px solid #b1fcb8;
 }
