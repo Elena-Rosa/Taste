@@ -77,7 +77,7 @@ namespace Taste.Controllers
     public ActionResult AddFlavor(int id)
     {
       var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
-      ViewBag.TreaId = new SelectList(_db.Flavors, "FlavorId", "Name");
+      ViewBag.TreatId = new SelectList(_db.Flavors, "FlavorId", "Name");
       return View(thisTreat);
     }
 

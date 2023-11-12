@@ -1,13 +1,14 @@
 @{
   Layout = "_Layout";
 }
+@{
+  ViewData["Title"] = "Home Page";
+}
 
 @using Microsoft.AspNetCore.Mvc;
 @using Taste.Models;
 @using System.Collections.Generic;
 
-
-<h1>Welcome to Taste!</h1>
 
 <hr>
 
@@ -24,14 +25,14 @@
 </ul>
 
 <h4>Flavors</h4>
-@if (Model["machines"].Length == 0)
+@if (Model["flavors"].Length == 0)
 {
-  <p>No machines have been added yet!</p>
+  <p>No flavors have been added yet!</p>
 }
 <ul>
   @foreach (Flavor flavor in Model["flavors"])
   {
-    <li>@Html.ActionLink(@flavor.FlavorDescription, "Details", "Flavors", new { id = @flavor.FalvorId })</li>
+    <li>@Html.ActionLink(@flavor.FlavorDescription, "Details", "Flavors", new { id = @flavor.FlavorId })</li>
   }
 </ul>
 
