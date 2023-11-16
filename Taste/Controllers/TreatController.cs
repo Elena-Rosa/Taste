@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Taste.Controllers
 {
+  [Authorize]
   public class TreatsController : Controller
   {
     private readonly TasteContext _db;

@@ -22,6 +22,9 @@
   @Html.LabelFor(m => m.Password)
   @Html.EditorFor(m => m.Password)
 
+  @Html.LabelFor(user=> user.ConfirmPassword)
+  @Html.EditorFor(user=> user.ConfirmPassword)
+
   <input type="submit" value="Log in" />
 }
 

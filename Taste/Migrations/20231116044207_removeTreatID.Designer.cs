@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Taste.Models;
 
@@ -10,9 +11,10 @@ using Taste.Models;
 namespace Taste.Migrations
 {
     [DbContext(typeof(TasteContext))]
-    partial class TasteContextModelSnapshot : ModelSnapshot
+    [Migration("20231116044207_removeTreatID")]
+    partial class removeTreatID
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

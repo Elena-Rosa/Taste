@@ -12,12 +12,12 @@ using System.Security.Claims;
 namespace Taste.Controllers
 {
   [Authorize]
-  public class FlavorController : Controller
+  public class FlavorsController : Controller
   {
     private readonly TasteContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public FlavorController(UserManager<ApplicationUser> userManager, TasteContext db)
+    public FlavorsController(UserManager<ApplicationUser> userManager, TasteContext db)
     {
       _userManager = userManager;
       _db = db;
@@ -29,7 +29,6 @@ namespace Taste.Controllers
       ApplicationUser currentUser = await _userManager.FindByIdAsync(userId);
       List<Flavor> userFlavors = _db.Flavors
                           .Where(entry => entry.User.Id == currentUser.Id)
-                          .Include(flavor => flavor.Treat)
                           .ToList();
       return View(userFlavors);
     }
@@ -41,7 +40,7 @@ namespace Taste.Controllers
     }
 
     [HttpPost]
-    public async Task<ActionResult> Create(Flavor flavor, int TreatId)
+    public async Task<ActionResult> Create(Flavor flavor)
     {
       if (!ModelState.IsValid)
       {
@@ -62,7 +61,6 @@ namespace Taste.Controllers
     public ActionResult Details(int id)
     {
       Flavor thisFlavor = _db.Flavors
-          .Include(flavor => flavor.Treat)
           .Include(flavor => flavor.JoinEntities)
           .ThenInclude(join => join.Treat)
           .FirstOrDefault(flavor => flavor.FlavorId == id);
