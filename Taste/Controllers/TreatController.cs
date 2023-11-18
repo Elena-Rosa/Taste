@@ -28,11 +28,10 @@ namespace Taste.Controllers
       return View(model);
     }
 
-    public ActionResult Create(int id)
+    public ActionResult Create()
     {
-      Treat thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
-      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
-      return View(thisTreat);
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "FlavorName");
+      return View();
     }
 
 
@@ -43,7 +42,7 @@ namespace Taste.Controllers
       _db.SaveChanges();
       if (FlavorId != 0)
       {
-        _db.TreatFlavors.Add(new TreatFlavor() { FlavorId = FlavorId, TreatId = treat.TreatId });
+        _db.TreatFlavors.Add(new TreatFlavors() { FlavorId = FlavorId, TreatId = treat.TreatId });
       }
       _db.SaveChanges();
       return RedirectToAction("Index");
@@ -78,7 +77,7 @@ namespace Taste.Controllers
     public ActionResult AddFlavor(int id)
     {
       var thisTreat = _db.Treats.FirstOrDefault(treat => treat.TreatId == id);
-      ViewBag.TreatId = new SelectList(_db.Flavors, "FlavorId", "Name");
+      ViewBag.FlavorId = new SelectList(_db.Flavors, "FlavorId", "Name");
       return View(thisTreat);
     }
 
