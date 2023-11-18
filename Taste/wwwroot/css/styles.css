@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: bauhaus; /* Adjust the font family as needed */
+    background-color: #f0f0f0; /* Adjust the background color as needed */
+    font-style: italic;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 5vh;
+}
+
+header {
+    background-color: #ec7a7a; /* Adjust the header background color as needed */
+    color: rgb(23, 18, 18); /* Adjust the header text color as needed */
+    padding: 5px;
+    text-align: center;
+    width: 100%; /* Ensure the header spans the entire width of its container */
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+
+.title-container {
+    text-align: center;
+    margin-top: 10px; /* Adjust the margin as needed */
+}
+
+footer {
+    background-color: #ec7a7a; /* Adjust the footer background color as needed */
+    color: white; /* Adjust the footer text color as needed */
+    padding: 10px;
+    text-align: center;
+    position: fixed;
+    bottom: 0px;
+    width: 100%; /* Ensure the footer spans the entire width of its container */
+    box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+nav {
+    background-color: #fbc7c7;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color:black;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+    color:black
+}
+
+p {
+    color:aquamarine
+}
+
+hr {
+    border: 5px solid #b1fcb8;
+    width: 100%;
+
+}

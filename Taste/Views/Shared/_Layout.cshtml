@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8" />
     <title>Welcome to Taste!</title>
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>Welcome to Taste!</h1>
-            <hr />
+        <div class="title-container">
+            <h1>Taste</h1>
         </div>
     </header>
 
     <nav>
-        <div class="container">
+        <div class="page-container">
             <ul>
                 <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                <li>@Html.ActionLink("Flavors", "Index", "Flavors")</li>
-                <li>@Html.ActionLink("Treats", "Index", "Treats")</li>
+                <li>@Html.ActionLink("Manage Flavors", "Index", "Flavors")</li>
+                <li>@Html.ActionLink("Manage Treats", "Index", "Treats")</li>
                 <li>@Html.ActionLink("Account", "Index", "Account")</li>
             </ul>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="page-container">
         @RenderBody()
     </div>
 
     <footer>
-        <div class="container">
-            <hr />
+        <div class="footer">
             <p>&copy; 2023 Taste</p>
         </div>
     </footer>
