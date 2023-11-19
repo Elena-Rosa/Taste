@@ -34,18 +34,24 @@ namespace Taste.Controllers
       return View();
     }
 
-
     [HttpPost]
     public ActionResult Create(Treat treat, int FlavorId)
     {
-      _db.Treats.Add(treat);
-      _db.SaveChanges();
-      if (FlavorId != 0)
+      if (!ModelState.IsValid)
       {
-        _db.TreatFlavors.Add(new TreatFlavors() { FlavorId = FlavorId, TreatId = treat.TreatId });
+        return View(treat);
       }
-      _db.SaveChanges();
-      return RedirectToAction("Index");
+      else
+      {
+        _db.Treats.Add(treat);
+        _db.SaveChanges();
+        if (FlavorId != 0)
+        {
+          _db.TreatFlavors.Add(new TreatFlavor() { FlavorId = FlavorId, TreatId = treat.TreatId });
+        }
+        _db.SaveChanges();
+        return RedirectToAction("Index");
+      }
     }
 
     public ActionResult Details(int id)
