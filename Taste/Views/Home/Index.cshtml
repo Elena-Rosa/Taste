@@ -1,3 +1,7 @@
+@using Microsoft.AspNetCore.Mvc;
+@using Taste.Models;
+@using System.Collections.Generic;
+
 @{
   Layout = "_Layout";
 }
@@ -5,24 +9,19 @@
   ViewData["Title"] = "Home Page";
 }
 
-@using Microsoft.AspNetCore.Mvc;
-@using Taste.Models;
-@using System.Collections.Generic;
-
-
 @if (User.Identity.IsAuthenticated)
 {
-  <h4>Flavors for @User.Identity.Name</h4>
-  @if (Model["flavors"].Length == 0)
+  <h4>Treats for @User.Identity.Name</h4>
+  @if (Model["treats"].Length == 0)
   {
-    <p>No flavors have been added yet!</p>
+    <p>No treats have been added yet!</p>
   } 
-  <ul>
-    @foreach (Flavor flavor in Model["flavors"])
+<ul>
+    @foreach (Treat treat in Model["treats"] as IEnumerable<Treat>)
     {
-      <li>@Html.ActionLink(@flavor.Description, "Details", "Flavors", new { id = @flavor.FlavorId})</li>
+        <li>@treat.Name</li>
     }
-  </ul>
+</ul>
 }
 else
 {
